@@ -1,3 +1,9 @@
+/** 
+ * Home page
+ * 
+ * TODO: prompt a use current location button on clicking origin search bar
+*/
+
 "use client";
 
 import { useState } from "react";
@@ -32,8 +38,8 @@ export default function Home() {
       {/* Main Content */}
       <main className="flex-1 p-4">
         <div className="mb-6">
-          <h2 className="text-xl font-semibold mb-2">Campus Transit Made Simple</h2>
-          <p className="text-muted-foreground text-sm">
+          {/* <h2 className="text-xl font-semibold mb-2">Campus Transit Made Simple</h2> */}
+          <p className="text-muted-foreground text-m font-sans text-center">
             Find the fastest, cheapest, and most convenient routes across campus
           </p>
         </div>
