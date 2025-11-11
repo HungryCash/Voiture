@@ -1,7 +1,6 @@
 /** 
  * Home page
  * 
- * commented out line 41
  * TODO: prompt a use current location button on clicking origin search bar
 */
 
