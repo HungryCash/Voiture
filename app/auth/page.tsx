@@ -8,11 +8,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 export default function AuthPage() {
   const router = useRouter();
+  const supabase = createClient();
   const [activeTab, setActiveTab] = useState("signin");
   const [userType, setUserType] = useState<"passenger" | "driver">("passenger");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Sign In State
   const [signInEmail, setSignInEmail] = useState("");
@@ -24,33 +28,91 @@ export default function AuthPage() {
   const [signUpPassword, setSignUpPassword] = useState("");
   const [signUpConfirmPassword, setSignUpConfirmPassword] = useState("");
 
-  const handleSignIn = (e: React.FormEvent) => {
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement authentication logic
-    console.log("Sign in:", { email: signInEmail, password: signInPassword, userType });
+    setLoading(true);
+    setError(null);
 
-    // Redirect based on user type
-    if (userType === "driver") {
-      router.push("/driver-dashboard");
-    } else {
-      router.push("/");
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: signInEmail,
+        password: signInPassword,
+      });
+
+      if (error) throw error;
+
+      // Check user type from profile
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('user_type')
+        .eq('id', data.user?.id)
+        .single();
+
+      // Redirect based on user type
+      if (profile?.user_type === "driver") {
+        router.push("/driver-dashboard");
+      } else {
+        router.push("/");
+      }
+      router.refresh();
+    } catch (error: any) {
+      setError(error.message || "Failed to sign in");
+      console.error("Sign in error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleSignUp = (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement registration logic
+    setLoading(true);
+    setError(null);
+
     if (signUpPassword !== signUpConfirmPassword) {
-      alert("Passwords do not match!");
+      setError("Passwords do not match!");
+      setLoading(false);
       return;
     }
-    console.log("Sign up:", { name: signUpName, email: signUpEmail, userType });
 
-    // Redirect based on user type
-    if (userType === "driver") {
-      router.push("/driver-dashboard");
-    } else {
-      router.push("/");
+    try {
+      // Sign up the user
+      const { data, error } = await supabase.auth.signUp({
+        email: signUpEmail,
+        password: signUpPassword,
+        options: {
+          data: {
+            full_name: signUpName,
+            user_type: userType,
+          },
+        },
+      });
+
+      if (error) throw error;
+
+      // Update profile with full name
+      if (data.user) {
+        await supabase
+          .from('profiles')
+          .update({ full_name: signUpName })
+          .eq('id', data.user.id);
+      }
+
+      // Show success message
+      alert("Account created successfully! You can now sign in.");
+
+      // Switch to sign in tab
+      setActiveTab("signin");
+
+      // Clear form
+      setSignUpName("");
+      setSignUpEmail("");
+      setSignUpPassword("");
+      setSignUpConfirmPassword("");
+    } catch (error: any) {
+      setError(error.message || "Failed to create account");
+      console.error("Sign up error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -84,6 +146,13 @@ export default function AuthPage() {
                     Sign in to access your account
                   </p>
                 </div>
+
+                {/* Error Message */}
+                {error && activeTab === "signin" && (
+                  <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded text-sm">
+                    {error}
+                  </div>
+                )}
 
                 {/* User Type Selection */}
                 <div className="space-y-2">
@@ -136,8 +205,8 @@ export default function AuthPage() {
                   />
                 </div>
 
-                <Button type="submit" className="w-full" size="lg">
-                  Sign In
+                <Button type="submit" className="w-full" size="lg" disabled={loading}>
+                  {loading ? "Signing in..." : "Sign In"}
                 </Button>
 
                 <div className="text-center">
@@ -157,6 +226,13 @@ export default function AuthPage() {
                     Join Voiture to simplify your campus transit
                   </p>
                 </div>
+
+                {/* Error Message */}
+                {error && activeTab === "signup" && (
+                  <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded text-sm">
+                    {error}
+                  </div>
+                )}
 
                 {/* User Type Selection */}
                 <div className="space-y-2">
@@ -237,8 +313,8 @@ export default function AuthPage() {
                   />
                 </div>
 
-                <Button type="submit" className="w-full" size="lg">
-                  Create Account
+                <Button type="submit" className="w-full" size="lg" disabled={loading}>
+                  {loading ? "Creating Account..." : "Create Account"}
                 </Button>
 
                 <p className="text-xs text-muted-foreground text-center">
