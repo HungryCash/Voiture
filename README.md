@@ -42,8 +42,10 @@ Taking down the inconvenience of having multiple apps to just get from point A t
 
 ## Documentation
 
+- **[SUPABASE_SETUP_GUIDE.md](SUPABASE_SETUP_GUIDE.md)** - ⭐ Start here! Step-by-step Supabase setup
 - **[QUICK_START.md](QUICK_START.md)** - Get up and running in 5 minutes
 - **[DEPLOYMENT.md](DEPLOYMENT.md)** - Complete deployment guide with Supabase setup
+- **[DEPLOYMENT_CHECKLIST.md](DEPLOYMENT_CHECKLIST.md)** - Deployment checklist for Vercel
 - **[.env.example](.env.example)** - Environment variables template
 
 ## Getting Started

@@ -28,7 +28,7 @@ export default function Home() {
       {/* Header */}
       <header className="bg-primary text-primary-foreground p-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold">Voiture</h1>
-        <Link href="/auth">
+        <Link href="/profile">
           <Button variant="ghost" size="icon" className="text-primary-foreground">
             <User className="h-5 w-5" />
           </Button>
