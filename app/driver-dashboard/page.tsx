@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { LogOut, Users, MapPin, Clock, AlertCircle } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 type BusStop = {
   id: string;
@@ -17,11 +19,110 @@ type BusStop = {
 };
 
 export default function DriverDashboard() {
-  const [currentRoute] = useState("4B Silver Loop");
-  const [nextStop] = useState("Purdue Memorial Union");
+  const router = useRouter();
+  const supabase = createClient();
 
-  // Mock data - This will be replaced with real-time data from Raspberry Pi/Flipper Zero
-  const busStops: BusStop[] = [
+  const [currentRoute] = useState("4B Silver Loop");
+  const [busStops, setBusStops] = useState<BusStop[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [driverName, setDriverName] = useState("Driver");
+
+  useEffect(() => {
+    checkAuth();
+    loadBusStops();
+
+    // Subscribe to real-time updates
+    const channel = supabase
+      .channel('passenger-counts-changes')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'passenger_counts'
+      }, () => {
+        loadBusStops(); // Reload data when counts change
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  async function checkAuth() {
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      router.push('/auth');
+      return;
+    }
+
+    // Get driver profile
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('full_name, user_type')
+      .eq('id', user.id)
+      .single();
+
+    if (profile?.user_type !== 'driver') {
+      router.push('/');
+      return;
+    }
+
+    setDriverName(profile.full_name || 'Driver');
+  }
+
+  async function loadBusStops() {
+    try {
+      // Get bus stops with latest passenger counts
+      const { data: stops, error } = await supabase
+        .from('bus_stops')
+        .select(`
+          id,
+          name,
+          address,
+          route_id,
+          passenger_counts (
+            count,
+            status,
+            timestamp
+          )
+        `)
+        .eq('route_id', '4B')
+        .order('name');
+
+      if (error) throw error;
+
+      // Transform data and add estimated arrival times
+      const transformedStops: BusStop[] = stops.map((stop: any, index: number) => {
+        const latestCount = stop.passenger_counts?.[0] || { count: 0, status: 'normal' };
+
+        return {
+          id: stop.id,
+          name: stop.name,
+          waitingPassengers: latestCount.count,
+          estimatedArrival: `${(index + 1) * 5} min`,
+          address: stop.address,
+          status: latestCount.status as "normal" | "crowded" | "urgent",
+        };
+      });
+
+      setBusStops(transformedStops);
+    } catch (error) {
+      console.error('Error loading bus stops:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleSignOut() {
+    await supabase.auth.signOut();
+    router.push('/auth');
+  }
+
+  const nextStop = busStops[0]?.name || "Loading...";
+
+  // Mock data fallback - This will be replaced with real-time data from Raspberry Pi/Flipper Zero
+  const mockBusStops: BusStop[] = [
     {
       id: "1",
       name: "Purdue Memorial Union",
@@ -86,8 +187,20 @@ export default function DriverDashboard() {
     }
   };
 
-  const totalWaiting = busStops.reduce((sum, stop) => sum + stop.waitingPassengers, 0);
-  const urgentStops = busStops.filter((stop) => stop.status === "urgent").length;
+  const displayStops = busStops.length > 0 ? busStops : mockBusStops;
+  const totalWaiting = displayStops.reduce((sum, stop) => sum + stop.waitingPassengers, 0);
+  const urgentStops = displayStops.filter((stop) => stop.status === "urgent").length;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-background">
@@ -96,13 +209,17 @@ export default function DriverDashboard() {
         <div className="flex justify-between items-start mb-3">
           <div>
             <h1 className="text-2xl font-bold">Driver Dashboard</h1>
-            <p className="text-sm opacity-90">Route: {currentRoute}</p>
+            <p className="text-sm opacity-90">Welcome, {driverName}</p>
+            <p className="text-xs opacity-75">Route: {currentRoute}</p>
           </div>
-          <Link href="/auth">
-            <Button variant="ghost" size="icon" className="text-primary-foreground">
-              <LogOut className="h-5 w-5" />
-            </Button>
-          </Link>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-primary-foreground"
+            onClick={handleSignOut}
+          >
+            <LogOut className="h-5 w-5" />
+          </Button>
         </div>
 
         {/* Stats Cards */}
@@ -117,7 +234,7 @@ export default function DriverDashboard() {
           <Card className="p-3 bg-white/10 backdrop-blur border-white/20">
             <div className="text-center">
               <MapPin className="h-5 w-5 mx-auto mb-1 text-primary-foreground" />
-              <div className="text-2xl font-bold text-primary-foreground">{busStops.length}</div>
+              <div className="text-2xl font-bold text-primary-foreground">{displayStops.length}</div>
               <div className="text-xs opacity-90">Stops Ahead</div>
             </div>
           </Card>
@@ -144,11 +261,11 @@ export default function DriverDashboard() {
               <div className="flex items-center gap-3 mt-2 text-sm text-muted-foreground">
                 <span className="flex items-center gap-1">
                   <Clock className="h-3 w-3" />
-                  ETA: {busStops[0].estimatedArrival}
+                  ETA: {displayStops[0]?.estimatedArrival}
                 </span>
                 <span className="flex items-center gap-1">
                   <Users className="h-3 w-3" />
-                  {busStops[0].waitingPassengers} waiting
+                  {displayStops[0]?.waitingPassengers} waiting
                 </span>
               </div>
             </div>
@@ -166,7 +283,7 @@ export default function DriverDashboard() {
         </div>
 
         <div className="space-y-3">
-          {busStops.map((stop, index) => (
+          {displayStops.map((stop, index) => (
             <Card
               key={stop.id}
               className={`p-4 ${
@@ -183,7 +300,7 @@ export default function DriverDashboard() {
                   >
                     {index + 1}
                   </div>
-                  {index < busStops.length - 1 && (
+                  {index < displayStops.length - 1 && (
                     <div className="w-0.5 h-12 bg-muted mt-2"></div>
                   )}
                 </div>
