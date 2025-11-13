@@ -4,11 +4,11 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Clock, DollarSign, RefreshCw, MapPin } from "lucide-react";
+import { ArrowLeft, Clock, DollarSign, RefreshCw, MapPin, HelpCircle, Bookmark } from "lucide-react";
 import Link from "next/link";
 
 type RouteOption = {
@@ -33,6 +33,43 @@ type RouteStep = {
 
 export default function RoutesPage() {
   const [sortBy, setSortBy] = useState<"fastest" | "cheapest" | "convenient">("fastest");
+  const [showRecommendationInfo, setShowRecommendationInfo] = useState(false);
+  const [savedRoutes, setSavedRoutes] = useState<Set<string>>(new Set());
+  const infoRef = useRef<HTMLDivElement>(null);
+
+  const toggleSaveRoute = (routeId: string) => {
+    setSavedRoutes((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(routeId)) {
+        newSet.delete(routeId);
+      } else {
+        newSet.add(routeId);
+      }
+      return newSet;
+    });
+  };
+
+  // Close tooltip when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (infoRef.current && !infoRef.current.contains(event.target as Node)) {
+        setShowRecommendationInfo(false);
+      }
+    };
+
+    if (showRecommendationInfo) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showRecommendationInfo]);
+
+  // Close tooltip when sort option changes
+  useEffect(() => {
+    setShowRecommendationInfo(false);
+  }, [sortBy]);
 
   // Mock data - This will be replaced with actual API data
   const routes: RouteOption[] = [
@@ -258,14 +295,38 @@ export default function RoutesPage() {
 
       {/* Routes List */}
       <main className="flex-1 p-4 space-y-3 pb-20">
-        {sortedRoutes.map((route) => (
+        {sortedRoutes.map((route, index) => (
           <Card key={route.id} className="p-4 hover:shadow-lg transition-shadow cursor-pointer">
             {/* Route Header */}
             <div className="flex items-start justify-between mb-3">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
                   <h3 className="font-semibold">{route.type}</h3>
-                  {route.badge && (
+                  {index === 0 && (
+                    <div ref={infoRef} className="relative flex items-center gap-1">
+                      <Badge variant="default" className="text-[0.7rem] px-1.5 py-0 font-normal leading-tight">
+                        Recommended
+                      </Badge>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowRecommendationInfo(!showRecommendationInfo);
+                        }}
+                        className="relative"
+                        type="button"
+                      >
+                        <HelpCircle className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground transition-colors" />
+                        {showRecommendationInfo && (
+                          <div className="absolute left-0 top-6 z-50 w-64 p-3 bg-card border border-border rounded-md shadow-lg text-sm">
+                            <p className="text-card-foreground">
+                              This route is recommended based on a balance of <strong>cost-effectiveness</strong> and <strong>travel time</strong>, optimized for your selected sorting preference.
+                            </p>
+                          </div>
+                        )}
+                      </button>
+                    </div>
+                  )}
+                  {route.badge && index !== 0 && (
                     <Badge
                       variant={
                         route.badge === "BEST"
@@ -316,10 +377,25 @@ export default function RoutesPage() {
               ))}
             </div>
 
-            {/* View Details Button */}
-            <Button variant="outline" className="w-full mt-2" size="sm">
-              View Details
-            </Button>
+            {/* View Details Button and Bookmark */}
+            <div className="flex gap-2 mt-2">
+              <Button variant="outline" className="flex-1" size="sm">
+                View Details
+              </Button>
+              <Button
+                variant={savedRoutes.has(route.id) ? "default" : "outline"}
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleSaveRoute(route.id);
+                }}
+                className="px-3"
+              >
+                <Bookmark
+                  className={`h-4 w-4 ${savedRoutes.has(route.id) ? "fill-current" : ""}`}
+                />
+              </Button>
+            </div>
           </Card>
         ))}
       </main>

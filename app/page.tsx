@@ -1,8 +1,6 @@
 /** 
  * Home page
- * 
- * TODO: prompt a use current location button on clicking origin search bar
-*/
+ */
 
 "use client";
 
@@ -10,17 +8,38 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { ArrowLeftRight, MapPin, User } from "lucide-react";
+import { ArrowLeftRight, MapPin, User, Navigation } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
+  const [showCurrentLocationButton, setShowCurrentLocationButton] = useState(false);
 
   const handleSwapLocations = () => {
     const temp = origin;
     setOrigin(destination);
     setDestination(temp);
+  };
+
+  const handleUseCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          // You can use a reverse geocoding service here to get the address
+          // For now, we'll set it as coordinates
+          setOrigin(`${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
+          setShowCurrentLocationButton(false);
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+          alert("Unable to get your location. Please check your browser permissions.");
+        }
+      );
+    } else {
+      alert("Geolocation is not supported by your browser.");
+    }
   };
 
   return (
@@ -55,8 +74,27 @@ export default function Home() {
                 placeholder="Origin (e.g., West Lafayette)"
                 value={origin}
                 onChange={(e) => setOrigin(e.target.value)}
+                onFocus={() => setShowCurrentLocationButton(true)}
+                onBlur={() => {
+                  // Delay hiding to allow button click
+                  setTimeout(() => setShowCurrentLocationButton(false), 200);
+                }}
                 className="pl-10"
               />
+              {showCurrentLocationButton && (
+                <div className="mt-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleUseCurrentLocation}
+                    className="w-full"
+                  >
+                    <Navigation className="h-4 w-4 mr-2" />
+                    Use Current Location
+                  </Button>
+                </div>
+              )}
             </div>
 
             {/* Swap Button */}
@@ -84,11 +122,13 @@ export default function Home() {
             </div>
 
             {/* Search Button */}
-            <Link href="/routes">
-              <Button className="w-full" size="lg">
-                Search Routes
-              </Button>
-            </Link>
+            <div className="pt-2">
+              <Link href="/routes">
+                <Button className="w-full" size="lg">
+                  Search Routes
+                </Button>
+              </Link>
+            </div>
           </div>
         </Card>
 
