@@ -1,20 +1,45 @@
+/** 
+ * Home page
+ */
+
 "use client";
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { ArrowLeftRight, MapPin, User } from "lucide-react";
+import { ArrowLeftRight, MapPin, User, Navigation } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
+  const [showCurrentLocationButton, setShowCurrentLocationButton] = useState(false);
 
   const handleSwapLocations = () => {
     const temp = origin;
     setOrigin(destination);
     setDestination(temp);
+  };
+
+  const handleUseCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          // You can use a reverse geocoding service here to get the address
+          // For now, we'll set it as coordinates
+          setOrigin(`${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
+          setShowCurrentLocationButton(false);
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+          alert("Unable to get your location. Please check your browser permissions.");
+        }
+      );
+    } else {
+      alert("Geolocation is not supported by your browser.");
+    }
   };
 
   return (
@@ -32,8 +57,8 @@ export default function Home() {
       {/* Main Content */}
       <main className="flex-1 p-4">
         <div className="mb-6">
-          <h2 className="text-xl font-semibold mb-2">Campus Transit Made Simple</h2>
-          <p className="text-muted-foreground text-sm">
+          {/* <h2 className="text-xl font-semibold mb-2">Campus Transit Made Simple</h2> */}
+          <p className="text-muted-foreground text-m font-sans text-center">
             Find the fastest, cheapest, and most convenient routes across campus
           </p>
         </div>
@@ -49,8 +74,27 @@ export default function Home() {
                 placeholder="Origin (e.g., West Lafayette)"
                 value={origin}
                 onChange={(e) => setOrigin(e.target.value)}
+                onFocus={() => setShowCurrentLocationButton(true)}
+                onBlur={() => {
+                  // Delay hiding to allow button click
+                  setTimeout(() => setShowCurrentLocationButton(false), 200);
+                }}
                 className="pl-10"
               />
+              {showCurrentLocationButton && (
+                <div className="mt-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleUseCurrentLocation}
+                    className="w-full"
+                  >
+                    <Navigation className="h-4 w-4 mr-2" />
+                    Use Current Location
+                  </Button>
+                </div>
+              )}
             </div>
 
             {/* Swap Button */}
@@ -78,11 +122,13 @@ export default function Home() {
             </div>
 
             {/* Search Button */}
-            <Link href="/routes">
-              <Button className="w-full" size="lg">
-                Search Routes
-              </Button>
-            </Link>
+            <div className="pt-2">
+              <Link href="/routes">
+                <Button className="w-full" size="lg">
+                  Search Routes
+                </Button>
+              </Link>
+            </div>
           </div>
         </Card>
 
@@ -91,7 +137,7 @@ export default function Home() {
           <h3 className="text-lg font-semibold">Transportation Services</h3>
 
           <Link href="/routes">
-            <Card className="p-4 hover:bg-accent transition-colors cursor-pointer">
+            <Card className="py-2 px-4 hover:bg-accent transition-colors cursor-pointer">
               <div className="flex justify-between items-center">
                 <div>
                   <h4 className="font-semibold">Purdue Campus Transit</h4>
@@ -103,7 +149,7 @@ export default function Home() {
           </Link>
 
           <Link href="/jagline">
-            <Card className="p-4 hover:bg-accent transition-colors cursor-pointer">
+            <Card className="py-2 px-4 hover:bg-accent transition-colors cursor-pointer">
               <div className="flex justify-between items-center">
                 <div>
                   <h4 className="font-semibold">Jagline Live Buses</h4>
@@ -115,7 +161,7 @@ export default function Home() {
           </Link>
 
           <Link href="/routes">
-            <Card className="p-4 hover:bg-accent transition-colors cursor-pointer">
+            <Card className="py-2 px-4 hover:bg-accent transition-colors cursor-pointer">
               <div className="flex justify-between items-center">
                 <div>
                   <h4 className="font-semibold">Campus Shuttle</h4>
@@ -127,7 +173,7 @@ export default function Home() {
           </Link>
 
           <Link href="/scooters">
-            <Card className="p-4 hover:bg-accent transition-colors cursor-pointer">
+            <Card className="py-2 px-4 hover:bg-accent transition-colors cursor-pointer">
               <div className="flex justify-between items-center">
                 <div>
                   <h4 className="font-semibold">Scooter Services</h4>
@@ -139,7 +185,7 @@ export default function Home() {
           </Link>
 
           <Link href="/routes">
-            <Card className="p-4 hover:bg-accent transition-colors cursor-pointer">
+            <Card className="py-2 px-4 hover:bg-accent transition-colors cursor-pointer">
               <div className="flex justify-between items-center">
                 <div>
                   <h4 className="font-semibold">Flights</h4>
