@@ -8,6 +8,8 @@ import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Dialog } from "@/components/ui/dialog";
+import RouteMap from "@/components/RouteMap";
 import { ArrowLeft, Clock, DollarSign, RefreshCw, MapPin, HelpCircle, Bookmark } from "lucide-react";
 import Link from "next/link";
 
@@ -35,6 +37,8 @@ export default function RoutesPage() {
   const [sortBy, setSortBy] = useState<"fastest" | "cheapest" | "convenient">("fastest");
   const [showRecommendationInfo, setShowRecommendationInfo] = useState(false);
   const [savedRoutes, setSavedRoutes] = useState<Set<string>>(new Set());
+  const [selectedRoute, setSelectedRoute] = useState<RouteOption | null>(null);
+  const [isMapDialogOpen, setIsMapDialogOpen] = useState(false);
   const infoRef = useRef<HTMLDivElement>(null);
 
   const toggleSaveRoute = (routeId: string) => {
@@ -47,6 +51,24 @@ export default function RoutesPage() {
       }
       return newSet;
     });
+  };
+
+  const handleViewDetails = (route: RouteOption) => {
+    setSelectedRoute(route);
+    setIsMapDialogOpen(true);
+  };
+
+  // Extract origin and destination from route steps
+  const getRouteEndpoints = (route: RouteOption | null) => {
+    if (!route || route.steps.length === 0) {
+      return { origin: "West Lafayette", destination: "Indianapolis" };
+    }
+    const firstStep = route.steps[0];
+    const lastStep = route.steps[route.steps.length - 1];
+    return {
+      origin: firstStep.from,
+      destination: lastStep.to,
+    };
   };
 
   // Close tooltip when clicking outside
@@ -379,7 +401,15 @@ export default function RoutesPage() {
 
             {/* View Details Button and Bookmark */}
             <div className="flex gap-2 mt-2">
-              <Button variant="outline" className="flex-1" size="sm">
+              <Button 
+                variant="outline" 
+                className="flex-1" 
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleViewDetails(route);
+                }}
+              >
                 View Details
               </Button>
               <Button
@@ -416,6 +446,25 @@ export default function RoutesPage() {
           </Button>
         </div>
       </nav>
+
+      {/* Map Dialog */}
+      <Dialog
+        open={isMapDialogOpen}
+        onOpenChange={setIsMapDialogOpen}
+        title={selectedRoute ? `Route: ${selectedRoute.type}` : "Route Details"}
+      >
+        <div className="h-[600px]">
+          {selectedRoute && (() => {
+            const { origin, destination } = getRouteEndpoints(selectedRoute);
+            return (
+              <RouteMap
+                origin={origin}
+                destination={destination}
+              />
+            );
+          })()}
+        </div>
+      </Dialog>
     </div>
   );
 }
