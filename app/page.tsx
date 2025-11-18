@@ -148,12 +148,12 @@ export default function Home() {
             </Card>
           </Link>
 
-          <Link href="/routes">
+          <Link href="/jagline">
             <Card className="p-4 hover:bg-accent transition-colors cursor-pointer">
               <div className="flex justify-between items-center">
                 <div>
-                  <h4 className="font-semibold">Jagline</h4>
-                  <p className="text-sm text-muted-foreground">Indianapolis transit</p>
+                  <h4 className="font-semibold">Jagline Live Buses</h4>
+                  <p className="text-sm text-muted-foreground">Real-time IUPUI buses</p>
                 </div>
                 <div className="text-2xl">🚍</div>
               </div>
@@ -172,12 +172,12 @@ export default function Home() {
             </Card>
           </Link>
 
-          <Link href="/routes">
+          <Link href="/scooters">
             <Card className="p-4 hover:bg-accent transition-colors cursor-pointer">
               <div className="flex justify-between items-center">
                 <div>
                   <h4 className="font-semibold">Scooter Services</h4>
-                  <p className="text-sm text-muted-foreground">Veo & Bird scooters</p>
+                  <p className="text-sm text-muted-foreground">Lime & Veo scooters</p>
                 </div>
                 <div className="text-2xl">🛴</div>
               </div>
