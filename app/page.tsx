@@ -137,7 +137,7 @@ export default function Home() {
           <h3 className="text-lg font-semibold">Transportation Services</h3>
 
           <Link href="/routes">
-            <Card className="p-4 hover:bg-accent transition-colors cursor-pointer">
+            <Card className="py-2 px-4 hover:bg-accent transition-colors cursor-pointer">
               <div className="flex justify-between items-center">
                 <div>
                   <h4 className="font-semibold">Purdue Campus Transit</h4>
@@ -149,7 +149,7 @@ export default function Home() {
           </Link>
 
           <Link href="/routes">
-            <Card className="p-4 hover:bg-accent transition-colors cursor-pointer">
+            <Card className="py-2 px-4 hover:bg-accent transition-colors cursor-pointer">
               <div className="flex justify-between items-center">
                 <div>
                   <h4 className="font-semibold">Jagline</h4>
@@ -161,7 +161,7 @@ export default function Home() {
           </Link>
 
           <Link href="/routes">
-            <Card className="p-4 hover:bg-accent transition-colors cursor-pointer">
+            <Card className="py-2 px-4 hover:bg-accent transition-colors cursor-pointer">
               <div className="flex justify-between items-center">
                 <div>
                   <h4 className="font-semibold">Campus Shuttle</h4>
@@ -173,7 +173,7 @@ export default function Home() {
           </Link>
 
           <Link href="/routes">
-            <Card className="p-4 hover:bg-accent transition-colors cursor-pointer">
+            <Card className="py-2 px-4 hover:bg-accent transition-colors cursor-pointer">
               <div className="flex justify-between items-center">
                 <div>
                   <h4 className="font-semibold">Scooter Services</h4>
@@ -185,7 +185,7 @@ export default function Home() {
           </Link>
 
           <Link href="/routes">
-            <Card className="p-4 hover:bg-accent transition-colors cursor-pointer">
+            <Card className="py-2 px-4 hover:bg-accent transition-colors cursor-pointer">
               <div className="flex justify-between items-center">
                 <div>
                   <h4 className="font-semibold">Flights</h4>
