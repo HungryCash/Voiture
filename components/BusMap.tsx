@@ -79,6 +79,7 @@ export default function BusMap({ buses, selectedRouteIds }: BusMapProps) {
 
     // Draw route shapes
     if (mapRef.current && routes.length > 0) {
+      const map = mapRef.current;
       routes.forEach(route => {
         const shouldShow = !selectedRouteIds || selectedRouteIds.size === 0 || selectedRouteIds.has(route.routeId);
 
@@ -96,7 +97,7 @@ export default function BusMap({ buses, selectedRouteIds }: BusMapProps) {
             weight: 4,
             opacity: 0.7,
             smoothFactor: 1
-          }).addTo(mapRef.current);
+          }).addTo(map);
 
           routeLine.bindPopup(`<b>${route.name}</b>`);
           routeShapesRef.current[route.routeId] = routeLine;
@@ -171,7 +172,7 @@ export default function BusMap({ buses, selectedRouteIds }: BusMapProps) {
           const popupContent = `
             <div class="p-2">
               <div class="font-bold text-sm">Bus ${bus.name}</div>
-              <div class="text-xs text-gray-600">${bus.route?.route_name || `Route ${bus.route_id}`}</div>
+              <div class="text-xs text-gray-600">${bus.route?.route_name || "Unknown Route"}</div>
               <div class="mt-2 space-y-1 text-xs">
                 <div><strong>Speed:</strong> ${bus.ground_speed.toFixed(0)} mph</div>
                 <div><strong>Heading:</strong> ${bus.heading}°</div>
