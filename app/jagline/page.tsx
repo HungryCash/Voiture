@@ -193,13 +193,13 @@ export default function JaglinePage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-background">
+    <div className="min-h-screen flex flex-col bg-gray-50">
       {/* Header */}
-      <header className="bg-gradient-to-r from-blue-600 to-blue-500 text-white p-4 sticky top-0 z-10">
+      <header className="bg-black text-[#CFB991] p-4 sticky top-0 z-10">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center">
             <Link href="/">
-              <Button variant="ghost" size="icon" className="text-white">
+              <Button variant="ghost" size="icon" className="text-[#CFB991] hover:text-[#CEB888]">
                 <ArrowLeft className="h-5 w-5" />
               </Button>
             </Link>
@@ -208,7 +208,7 @@ export default function JaglinePage() {
           <Button
             variant="ghost"
             size="icon"
-            className="text-white"
+            className="text-[#CFB991] hover:text-[#CEB888]"
             onClick={fetchLiveData}
             disabled={refreshing}
           >
@@ -216,14 +216,14 @@ export default function JaglinePage() {
           </Button>
         </div>
 
-        <div className="flex items-center justify-between text-sm">
+        <div className="flex items-center justify-between text-sm text-[#CFB991]/80">
           <div className="flex items-center gap-2">
             <Clock className="h-4 w-4" />
             <span>
               {lastUpdate ? `Updated ${getTimeSinceUpdate(lastUpdate.toISOString())}` : 'Never updated'}
             </span>
           </div>
-          <Badge variant="secondary" className="bg-white/20 text-white">
+          <Badge variant="secondary" className="bg-[#CFB991] text-black">
             {buses.length} buses active
           </Badge>
         </div>
@@ -288,23 +288,23 @@ export default function JaglinePage() {
       </div>
 
       {/* Stats */}
-      <div className="p-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+      <div className="p-2 bg-[#CFB991] text-black">
         <div className="grid grid-cols-3 gap-2 text-center">
           <div>
             <div className="text-xl font-bold">{filteredBuses.length}</div>
-            <div className="text-[10px] opacity-90">Active</div>
+            <div className="text-[10px] opacity-70">Active</div>
           </div>
           <div>
             <div className="text-xl font-bold">
               {filteredBuses.filter(b => b.is_on_route).length}
             </div>
-            <div className="text-[10px] opacity-90">On Route</div>
+            <div className="text-[10px] opacity-70">On Route</div>
           </div>
           <div>
             <div className="text-xl font-bold">
               {filteredBuses.filter(b => b.is_delayed).length}
             </div>
-            <div className="text-[10px] opacity-90">Delayed</div>
+            <div className="text-[10px] opacity-70">Delayed</div>
           </div>
         </div>
       </div>
