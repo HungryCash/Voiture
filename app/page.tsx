@@ -161,9 +161,12 @@ export default function Home() {
           </Link>
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
           <Link href="/routes">
             <Card className="py-2 px-4 hover:bg-accent transition-colors cursor-pointer">
 =======
+=======
+>>>>>>> Stashed changes
           <Link href="/shuttle">
             <Card className="p-4 hover:bg-accent transition-colors cursor-pointer">
 >>>>>>> Stashed changes
@@ -190,9 +193,12 @@ export default function Home() {
           </Link>
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
           <Link href="/routes">
             <Card className="py-2 px-4 hover:bg-accent transition-colors cursor-pointer">
 =======
+=======
+>>>>>>> Stashed changes
           <Link href="/flights">
             <Card className="p-4 hover:bg-accent transition-colors cursor-pointer">
 >>>>>>> Stashed changes
