@@ -89,7 +89,7 @@ export default function BusMap({ buses, selectedRouteIds }: BusMapProps) {
             routeShapesRef.current[route.routeId].remove();
             delete routeShapesRef.current[route.routeId];
           }
-        } else if (shouldShow && route.points.length > 0) {
+        } else if (shouldShow && route.points.length > 0 && mapRef.current) {
           // Draw route shape
           const routeLine = L.polyline(route.points, {
             color: route.color,
