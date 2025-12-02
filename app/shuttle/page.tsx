@@ -250,7 +250,7 @@ export default function ShuttlePage() {
             {rides.map((ride) => {
               const isPast = new Date(ride.departure_time) < new Date();
               const seatsLeft = ride.capacity - ride.booked_seats;
-              const hasBooking = myBookings.some(b => b.ride.id === ride.id);
+              const hasBooking = myBookings.some(b => b.ride && b.ride.id === ride.id);
 
               return (
                 <div key={ride.id} className="bg-white rounded-lg shadow p-3">
