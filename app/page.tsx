@@ -160,7 +160,7 @@ export default function Home() {
             </Card>
           </Link>
 
-          <Link href="/routes">
+          <Link href="/shuttle">
             <Card className="py-2 px-4 hover:bg-accent transition-colors cursor-pointer">
               <div className="flex justify-between items-center">
                 <div>
@@ -184,7 +184,7 @@ export default function Home() {
             </Card>
           </Link>
 
-          <Link href="/routes">
+          <Link href="/flights">
             <Card className="py-2 px-4 hover:bg-accent transition-colors cursor-pointer">
               <div className="flex justify-between items-center">
                 <div>
