@@ -211,7 +211,7 @@ export default function ShuttlePage() {
       {myBookings.length > 0 && (
         <div className="p-4">
           <h2 className="font-bold text-lg mb-2">My Bookings</h2>
-          {myBookings.map((booking) => (
+          {myBookings.filter(booking => booking.ride).map((booking) => (
             <div key={booking.id} className="bg-white rounded-lg shadow p-3 mb-2">
               <div className="flex justify-between items-start">
                 <div>
