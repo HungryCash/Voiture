@@ -81,11 +81,12 @@ export default function ShuttlePage() {
         ride:shuttle_rides(*)
       `)
       .eq("user_id", user.id)
-      .gte("ride.departure_time", new Date().toISOString());
+      .order("created_at", { ascending: false });
 
     if (error) {
       console.error("Error fetching bookings:", error);
     } else {
+      // Filter out bookings without rides and show all bookings
       setMyBookings(data as any || []);
     }
   }
