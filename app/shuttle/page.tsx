@@ -93,6 +93,19 @@ export default function ShuttlePage() {
   async function bookRide(rideId: string) {
     if (!user) return;
 
+    // Check if user already has a booking for this ride
+    const { data: existingBooking } = await supabase
+      .from("shuttle_bookings")
+      .select("id, booking_code")
+      .eq("user_id", user.id)
+      .eq("ride_id", rideId)
+      .single();
+
+    if (existingBooking) {
+      alert(`You've already booked this ride! Your booking code: ${existingBooking.booking_code}`);
+      return;
+    }
+
     const { data: profile } = await supabase
       .from("profiles")
       .select("full_name")
@@ -109,7 +122,12 @@ export default function ShuttlePage() {
     });
 
     if (error) {
-      alert("Booking failed: " + error.message);
+      // Check if it's a duplicate booking error
+      if (error.message.includes("duplicate key") || error.message.includes("shuttle_bookings_user_id_ride_id_key")) {
+        alert("You've already booked this ride!");
+      } else {
+        alert("Booking failed: " + error.message);
+      }
     } else if (data && data[0]) {
       if (data[0].success) {
         alert(`Booking successful! Your code: ${data[0].booking_code}`);
