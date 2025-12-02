@@ -102,7 +102,7 @@ export default function JaglinePage() {
           routesMap.set(bus.route_id, {
             id: bus.route_id,
             name: bus.route?.route_name || `Route ${bus.route_id}`,
-            color: bus.route?.color || '#0066CC'
+            color: '#CFB991' // Use Purdue gold for all routes
           });
         }
       });
@@ -334,8 +334,8 @@ export default function JaglinePage() {
                   <div className="flex items-start gap-4">
                     {/* Bus Icon */}
                     <div
-                      className="w-16 h-16 rounded-lg flex items-center justify-center text-white text-2xl font-bold"
-                      style={{ backgroundColor: bus.route?.color || '#0066CC' }}
+                      className="w-16 h-16 rounded-lg flex items-center justify-center text-black text-2xl font-bold"
+                      style={{ backgroundColor: '#CFB991' }}
                     >
                       🚌
                     </div>
