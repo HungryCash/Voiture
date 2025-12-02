@@ -199,7 +199,7 @@ export default function TrackShuttlePage() {
         <p className="text-red-600 mb-4">{error || "Booking not found"}</p>
         <button
           onClick={() => router.push("/shuttle")}
-          className="bg-blue-600 text-white px-4 py-2 rounded"
+          className="bg-[#CFB991] text-black px-4 py-2 rounded hover:bg-[#CEB888]"
         >
           Go to Shuttle Page
         </button>
@@ -210,12 +210,12 @@ export default function TrackShuttlePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-blue-600 text-white p-4">
+      <div className="bg-black text-[#CFB991] p-4">
         <button onClick={() => router.push("/shuttle")} className="mb-2">
           ← Back to Shuttle
         </button>
         <h1 className="text-xl font-bold">Live Shuttle Tracker</h1>
-        <p className="text-sm text-blue-100">Tracking Code: {code}</p>
+        <p className="text-sm text-[#CFB991]/80">Tracking Code: {code}</p>
       </div>
 
       {/* Ride Info */}
@@ -231,7 +231,7 @@ export default function TrackShuttlePage() {
                 <p className="text-sm text-gray-600">
                   ETA: {formatTime(busPosition.estimated_arrival)}
                 </p>
-                <p className="text-sm text-blue-600 font-medium mt-1">
+                <p className="text-sm text-[#CFB991] font-medium mt-1">
                   Progress: {busPosition.progress.toFixed(1)}%
                 </p>
               </>
@@ -249,7 +249,7 @@ export default function TrackShuttlePage() {
         {busPosition && (
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div
-              className="bg-blue-600 h-2 rounded-full transition-all duration-1000"
+              className="bg-[#CFB991] h-2 rounded-full transition-all duration-1000"
               style={{ width: `${busPosition.progress}%` }}
             />
           </div>
@@ -271,8 +271,8 @@ export default function TrackShuttlePage() {
 
       {/* Status Message */}
       <div className="p-4">
-        <div className="bg-blue-50 border border-blue-200 rounded p-3">
-          <p className="text-sm text-blue-800">
+        <div className="bg-[#CFB991]/10 border border-[#CFB991]/30 rounded p-3">
+          <p className="text-sm text-black">
             {busPosition && busPosition.progress < 100
               ? "🚌 Your shuttle is on the way!"
               : busPosition && busPosition.progress === 100
