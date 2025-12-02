@@ -165,7 +165,7 @@ export default function ShuttlePage() {
         <button onClick={() => router.push("/")} className="mb-2">
           ← Back
         </button>
-        <h1 className="text-xl font-bold">Campus Shuttle</h1>
+        <h1 className="text-xl font-bold">Campus Shuttle v2.1</h1>
         <p className="text-sm text-[#CFB991]/80">Book your ride between campuses</p>
       </div>
 
