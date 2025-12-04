@@ -136,7 +136,7 @@ export default function Home() {
         <div className="space-y-3">
           <h3 className="text-lg font-semibold">Transportation Services</h3>
 
-          <Link href="/routes">
+          <Link href="/citybus">
             <Card className="py-2 px-4 hover:bg-accent transition-colors cursor-pointer">
               <div className="flex justify-between items-center">
                 <div>
