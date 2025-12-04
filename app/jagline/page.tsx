@@ -12,6 +12,9 @@ import dynamic from "next/dynamic";
 // Dynamically import map to avoid SSR issues
 const BusMap = dynamic(() => import("@/components/BusMap"), { ssr: false });
 
+// Force dynamic rendering to avoid build-time errors
+export const dynamic = 'force-dynamic';
+
 type JaglineRoute = {
   id: string;
   route_id: number;

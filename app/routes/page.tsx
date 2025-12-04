@@ -15,6 +15,9 @@ import { ArrowLeft, Clock, DollarSign, RefreshCw, MapPin, HelpCircle, Bookmark }
 import Link from "next/link";
 import { findRoutes } from "@/lib/routing";
 
+// Force dynamic rendering to avoid build-time errors
+export const dynamic = 'force-dynamic';
+
 type RouteOption = {
   id: string;
   type: string;

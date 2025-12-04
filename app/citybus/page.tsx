@@ -11,6 +11,9 @@ import dynamic from "next/dynamic";
 // Dynamically import map to avoid SSR issues
 const CityBusMap = dynamic(() => import("@/components/CityBusMap"), { ssr: false });
 
+// Force dynamic rendering to avoid build-time errors
+export const dynamic = 'force-dynamic';
+
 type BusRoute = {
   id: string;
   name: string;
