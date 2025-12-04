@@ -45,10 +45,12 @@ const ROUTES: BusRoute[] = [
     shortName: "D",
     color: "#CFB991",
     stops: [
-      { id: "1", name: "Discovery Park", address: "1281 Win Hentschel Blvd", lat: 40.4280, lng: -86.9160, routes: ["discovery-park"] },
-      { id: "2", name: "Northwestern Ave", address: "Northwestern Ave & Lindberg Rd", lat: 40.4350, lng: -86.9280, routes: ["discovery-park"] },
-      { id: "3", name: "Airport", address: "Purdue University Airport", lat: 40.4120, lng: -86.9370, routes: ["discovery-park"] },
-      { id: "4", name: "State St", address: "State St & Grant St", lat: 40.4230, lng: -86.9140, routes: ["discovery-park"] },
+      { id: "1", name: "Lynn Hall", address: "Horticulture Greenhouses, 250 West Lafayette, IN", lat: 40.4245, lng: -86.9165, routes: ["discovery-park"] },
+      { id: "2", name: "CL50", address: "648 Oval Dr, West Lafayette, IN", lat: 40.4280, lng: -86.9220, routes: ["discovery-park"] },
+      { id: "3", name: "Daniels / Russell", address: "Mitch Daniels Blv & Russell St, BUS547", lat: 40.4305, lng: -86.9250, routes: ["discovery-park", "purdue-mall"] },
+      { id: "4", name: "MacArthur Dr", address: "Aspire Apts at Discovery Park, BUS011", lat: 40.4355, lng: -86.9270, routes: ["discovery-park"] },
+      { id: "5", name: "Airport Rd / District Blvd", address: "1501 W State St, West Lafayette, IN", lat: 40.4125, lng: -86.9360, routes: ["discovery-park"] },
+      { id: "6", name: "Niswonger", address: "1452 Aviation Dr, West Lafayette, IN", lat: 40.4085, lng: -86.9395, routes: ["discovery-park"] },
     ]
   },
   {
@@ -57,10 +59,14 @@ const ROUTES: BusRoute[] = [
     shortName: "P",
     color: "#9CA3AF",
     stops: [
-      { id: "5", name: "Memorial Union", address: "101 N Grant St", lat: 40.4267, lng: -86.9196, routes: ["purdue-mall"] },
-      { id: "6", name: "Krannert", address: "403 W State St", lat: 40.4254, lng: -86.9239, routes: ["purdue-mall"] },
-      { id: "7", name: "LILY Hall", address: "915 W State St", lat: 40.4258, lng: -86.9290, routes: ["purdue-mall"] },
-      { id: "8", name: "Hillenbrand", address: "1301 Third St", lat: 40.4310, lng: -86.9260, routes: ["purdue-mall"] },
+      { id: "7", name: "Armstrong", address: "Armstrong Hall on Stadium Ave, BUS190", lat: 40.4310, lng: -86.9180, routes: ["purdue-mall", "ross-ade"] },
+      { id: "8", name: "Electrical Engineering", address: "Electrical Engineering at Shelter, BUS538", lat: 40.4295, lng: -86.9165, routes: ["purdue-mall", "ross-ade"] },
+      { id: "9", name: "PMU", address: "425 W State St, West Lafayette, IN", lat: 40.4267, lng: -86.9196, routes: ["purdue-mall", "ross-ade"] },
+      { id: "3", name: "Daniels / Russell", address: "Mitch Daniels Blv & Russell St, BUS547", lat: 40.4305, lng: -86.9250, routes: ["discovery-park", "purdue-mall"] },
+      { id: "10", name: "Daniels / MacArthur", address: "Aspire Apts at Discovery Park, BUS011", lat: 40.4355, lng: -86.9270, routes: ["purdue-mall"] },
+      { id: "11", name: "McCutcheon", address: "McCutcheon Hall on McCutcheon, BUS491E", lat: 40.4340, lng: -86.9245, routes: ["purdue-mall"] },
+      { id: "12", name: "Hillenbrand", address: "1301 3rd Street, West Lafayette, IN", lat: 40.4315, lng: -86.9260, routes: ["purdue-mall"] },
+      { id: "13", name: "CoRec", address: "RSC on Jischke Dr, BUS362", lat: 40.4285, lng: -86.9235, routes: ["purdue-mall"] },
     ]
   },
   {
@@ -69,12 +75,14 @@ const ROUTES: BusRoute[] = [
     shortName: "R",
     color: "#CFB991",
     stops: [
-      { id: "9", name: "Daniels/University", address: "Matthews Hall, 812 W State St", lat: 40.4265, lng: -86.9275, routes: ["ross-ade"] },
-      { id: "10", name: "Armory", address: "305 N University St", lat: 40.4289, lng: -86.9205, routes: ["ross-ade"] },
-      { id: "11", name: "Armstrong", address: "Armstrong Hall, Stadium Ave", lat: 40.4310, lng: -86.9180, routes: ["ross-ade"] },
-      { id: "12", name: "Tiller Dr", address: "850 Steven Beering Dr", lat: 40.4335, lng: -86.9210, routes: ["ross-ade"] },
-      { id: "13", name: "Hilltop", address: "Tower Dr & Hilltop Dr", lat: 40.4380, lng: -86.9240, routes: ["ross-ade"] },
-      { id: "14", name: "David Ross Rd / Tower Dr", address: "800 David Ross Rd", lat: 40.4400, lng: -86.9200, routes: ["ross-ade"] },
+      { id: "7", name: "Armstrong", address: "Armstrong Hall on Stadium Ave, BUS190", lat: 40.4310, lng: -86.9180, routes: ["purdue-mall", "ross-ade"] },
+      { id: "8", name: "Electrical Engineering", address: "Electrical Engineering at Shelter, BUS538", lat: 40.4295, lng: -86.9165, routes: ["purdue-mall", "ross-ade"] },
+      { id: "9", name: "PMU", address: "425 W State St, West Lafayette, IN", lat: 40.4267, lng: -86.9196, routes: ["purdue-mall", "ross-ade"] },
+      { id: "14", name: "Daniels/University", address: "Matthews (Mary L.) Hall, 812 W State St", lat: 40.4265, lng: -86.9275, routes: ["ross-ade"] },
+      { id: "15", name: "Armory", address: "305 N University St, West Lafayette, IN", lat: 40.4289, lng: -86.9205, routes: ["ross-ade"] },
+      { id: "16", name: "Tiller Dr", address: "850 Steven Beering Dr, West Lafayette, IN", lat: 40.4335, lng: -86.9210, routes: ["ross-ade"] },
+      { id: "17", name: "Hilltop", address: "Tower Dr & Hilltop Dr, BUS472N", lat: 40.4380, lng: -86.9240, routes: ["ross-ade"] },
+      { id: "18", name: "David Ross Rd / Tower Dr", address: "800 David Ross Rd, West Lafayette, IN", lat: 40.4400, lng: -86.9200, routes: ["ross-ade"] },
     ]
   }
 ];
@@ -130,7 +138,7 @@ export default function CityBusPage() {
                 <ArrowLeft className="h-5 w-5" />
               </Button>
             </Link>
-            <h1 className="text-xl font-bold ml-2">CityBus Campus Transit</h1>
+            <h1 className="text-xl font-bold ml-2">Purdue Campus Transit</h1>
           </div>
         </div>
         <p className="text-sm text-[#CFB991]/80 mt-2">Fixed Route Shuttle Tracker</p>
@@ -177,8 +185,8 @@ export default function CityBusPage() {
 
       {/* Route Selection Modal */}
       {showRouteModal && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center justify-center">
-          <div className="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl max-h-[80vh] overflow-hidden">
+        <div className="fixed inset-0 bg-black/50 z-[9999] flex items-end sm:items-center justify-center">
+          <div className="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl max-h-[80vh] overflow-hidden relative z-[10000]">
             <div className="p-4 border-b flex items-center justify-between">
               <h2 className="text-xl font-bold">Service</h2>
               <Button
@@ -321,41 +329,44 @@ export default function CityBusPage() {
 
       {/* Selected Stop Panel */}
       {selectedStop && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-lg p-4 max-h-[60vh] overflow-y-auto animate-slide-up z-40">
+        <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-2xl border-t-2 border-[#CFB991] p-4 max-h-[50vh] overflow-y-auto z-[9998] max-w-md mx-auto">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <MapPin className="h-5 w-5 text-[#CFB991]" />
-              <h3 className="font-bold">{selectedStop.name}</h3>
+              <div className="w-8 h-8 rounded-full bg-[#CFB991] flex items-center justify-center">
+                <MapPin className="h-5 w-5 text-black" />
+              </div>
+              <h3 className="font-bold text-lg">{selectedStop.name}</h3>
             </div>
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setSelectedStop(null)}
+              className="hover:bg-gray-100"
             >
               <X className="h-5 w-5" />
             </Button>
           </div>
-          <p className="text-sm text-muted-foreground mb-4">{selectedStop.address}</p>
+          <p className="text-sm text-muted-foreground mb-4 pl-10">{selectedStop.address}</p>
 
           <div className="space-y-2">
-            <p className="text-xs font-semibold text-muted-foreground">NEXT SHUTTLES</p>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">NEXT SHUTTLES</p>
             {selectedStop.routes.map(routeId => {
               const route = ROUTES.find(r => r.id === routeId);
               if (!route) return null;
               return (
-                <div key={routeId} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                <div key={routeId} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
                   <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold"
+                    className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md"
                     style={{ backgroundColor: route.color }}
                   >
                     {route.shortName}
                   </div>
                   <div className="flex-1">
-                    <p className="font-medium">{route.name}</p>
+                    <p className="font-semibold">{route.name}</p>
                     <p className="text-xs text-muted-foreground">19 FREE</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-[#CFB991]">2 mins</p>
+                    <p className="font-bold text-[#CFB991] text-lg">2 mins</p>
                   </div>
                 </div>
               );

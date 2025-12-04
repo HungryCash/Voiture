@@ -135,7 +135,7 @@ export default function ProfilePage() {
       {/* Header */}
       <header className="bg-primary text-primary-foreground p-4 flex items-center justify-between">
         <div className="flex items-center">
-          <Link href="/">
+          <Link href={profile.user_type === "driver" ? "/driver/dashboard" : "/"}>
             <Button variant="ghost" size="icon" className="text-primary-foreground">
               <ArrowLeft className="h-5 w-5" />
             </Button>
@@ -288,7 +288,7 @@ export default function ProfilePage() {
           <h3 className="font-semibold mb-4">Quick Actions</h3>
           <div className="space-y-2">
             {profile.user_type === "driver" && (
-              <Link href="/driver-dashboard">
+              <Link href="/driver/dashboard">
                 <Button variant="outline" className="w-full justify-start">
                   🚌 Go to Driver Dashboard
                 </Button>
@@ -314,7 +314,7 @@ export default function ProfilePage() {
       {/* Bottom Navigation */}
       <nav className="border-t bg-background p-4">
         <div className="flex justify-around">
-          <Link href="/">
+          <Link href={profile.user_type === "driver" ? "/driver/dashboard" : "/"}>
             <Button variant="ghost" className="flex-1">
               Home
             </Button>

@@ -50,7 +50,7 @@ export default function AuthPage() {
 
       // Redirect based on user type
       if (profile?.user_type === "driver") {
-        router.push("/driver-dashboard");
+        router.push("/driver/dashboard");
       } else {
         router.push("/");
       }

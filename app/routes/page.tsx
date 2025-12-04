@@ -5,6 +5,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +13,7 @@ import { Dialog } from "@/components/ui/dialog";
 import RouteMap from "@/components/RouteMap";
 import { ArrowLeft, Clock, DollarSign, RefreshCw, MapPin, HelpCircle, Bookmark } from "lucide-react";
 import Link from "next/link";
+import { findRoutes } from "@/lib/routing";
 
 type RouteOption = {
   id: string;
@@ -34,12 +36,26 @@ type RouteStep = {
 };
 
 export default function RoutesPage() {
+  const searchParams = useSearchParams();
+  const origin = searchParams.get("origin") || "PMU";
+  const destination = searchParams.get("destination") || "Armstrong";
+
   const [sortBy, setSortBy] = useState<"fastest" | "cheapest" | "convenient">("fastest");
   const [showRecommendationInfo, setShowRecommendationInfo] = useState(false);
   const [savedRoutes, setSavedRoutes] = useState<Set<string>>(new Set());
   const [selectedRoute, setSelectedRoute] = useState<RouteOption | null>(null);
   const [isMapDialogOpen, setIsMapDialogOpen] = useState(false);
+  const [routes, setRoutes] = useState<RouteOption[]>([]);
   const infoRef = useRef<HTMLDivElement>(null);
+
+  // Find routes when component mounts or origin/destination changes
+  useEffect(() => {
+    async function loadRoutes() {
+      const foundRoutes = await findRoutes(origin, destination);
+      setRoutes(foundRoutes);
+    }
+    loadRoutes();
+  }, [origin, destination]);
 
   const toggleSaveRoute = (routeId: string) => {
     setSavedRoutes((prev) => {
@@ -93,160 +109,6 @@ export default function RoutesPage() {
     setShowRecommendationInfo(false);
   }, [sortBy]);
 
-  // Mock data - This will be replaced with actual API data
-  const routes: RouteOption[] = [
-    {
-      id: "1",
-      type: "Bus",
-      duration: "21h 18min",
-      price: "$115-220",
-      transfers: 1,
-      modes: ["Bus"],
-      badge: "BEST",
-      steps: [
-        {
-          mode: "walk",
-          name: "Walk to bus stop",
-          duration: "5min",
-          from: "West Lafayette",
-          to: "CityBus Stop",
-          icon: "🚶",
-        },
-        {
-          mode: "bus",
-          name: "CityBus 4B Silver Loop",
-          duration: "15min",
-          from: "Campus",
-          to: "Union",
-          icon: "🚌",
-        },
-        {
-          mode: "bus",
-          name: "Jagline Express",
-          duration: "21h",
-          from: "West Lafayette",
-          to: "Indianapolis",
-          icon: "🚍",
-        },
-      ],
-    },
-    {
-      id: "2",
-      type: "Bus, Train",
-      duration: "21h 56min",
-      price: "$122-610",
-      transfers: 2,
-      modes: ["Bus", "Train"],
-      steps: [
-        {
-          mode: "bus",
-          name: "CityBus to Station",
-          duration: "20min",
-          from: "Campus",
-          to: "Train Station",
-          icon: "🚌",
-        },
-        {
-          mode: "train",
-          name: "Amtrak Cardinal",
-          duration: "21h",
-          from: "Lafayette",
-          to: "Indianapolis",
-          icon: "🚂",
-        },
-      ],
-    },
-    {
-      id: "3",
-      type: "Campus Shuttle",
-      duration: "2h 30min",
-      price: "$45-80",
-      transfers: 0,
-      modes: ["Shuttle"],
-      badge: "CHEAPEST",
-      steps: [
-        {
-          mode: "shuttle",
-          name: "Campus Direct Shuttle",
-          duration: "2h 30min",
-          from: "West Lafayette",
-          to: "Indianapolis",
-          icon: "🚐",
-        },
-      ],
-    },
-    {
-      id: "4",
-      type: "Drive",
-      duration: "1h 13min",
-      price: "$16-24",
-      transfers: 0,
-      modes: ["Car"],
-      steps: [
-        {
-          mode: "car",
-          name: "Drive via I-65 S",
-          duration: "1h 13min",
-          from: "West Lafayette",
-          to: "Indianapolis",
-          icon: "🚗",
-        },
-      ],
-    },
-    {
-      id: "5",
-      type: "Scooter + Bus",
-      duration: "22h 5min",
-      price: "$120-225",
-      transfers: 2,
-      modes: ["Scooter", "Bus"],
-      badge: "ECO-FRIENDLY",
-      steps: [
-        {
-          mode: "scooter",
-          name: "Veo Scooter",
-          duration: "12min",
-          from: "Campus",
-          to: "Bus Station",
-          icon: "🛴",
-        },
-        {
-          mode: "bus",
-          name: "Jagline Express",
-          duration: "21h 53min",
-          from: "West Lafayette",
-          to: "Indianapolis",
-          icon: "🚍",
-        },
-      ],
-    },
-    {
-      id: "6",
-      type: "Fly",
-      duration: "4h 27min",
-      price: "$113-389",
-      transfers: 1,
-      modes: ["Flight"],
-      steps: [
-        {
-          mode: "bus",
-          name: "Campus Bus to Airport",
-          duration: "25min",
-          from: "Campus",
-          to: "Purdue Airport",
-          icon: "🚌",
-        },
-        {
-          mode: "flight",
-          name: "Regional Flight",
-          duration: "45min",
-          from: "Purdue Airport (LAF)",
-          to: "Indianapolis Airport (IND)",
-          icon: "✈️",
-        },
-      ],
-    },
-  ];
 
   const sortedRoutes = [...routes].sort((a, b) => {
     if (sortBy === "fastest") {
@@ -270,11 +132,11 @@ export default function RoutesPage() {
         <div className="ml-3 flex-1">
           <div className="flex items-center gap-2 text-sm">
             <MapPin className="h-4 w-4 text-green-400" />
-            <span>West Lafayette</span>
+            <span>{origin}</span>
           </div>
           <div className="flex items-center gap-2 text-sm mt-1">
             <MapPin className="h-4 w-4 text-red-400" />
-            <span>Indianapolis</span>
+            <span>{destination}</span>
           </div>
         </div>
         <Button variant="ghost" size="icon" className="text-primary-foreground">
@@ -317,7 +179,23 @@ export default function RoutesPage() {
 
       {/* Routes List */}
       <main className="flex-1 p-4 space-y-3 pb-20">
-        {sortedRoutes.map((route, index) => (
+        {sortedRoutes.length === 0 ? (
+          <Card className="p-8 text-center">
+            <MapPin className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+            <h3 className="font-semibold text-lg mb-2">No Routes Found</h3>
+            <p className="text-muted-foreground text-sm mb-4">
+              We couldn't find any routes between these locations.
+              <br />
+              Try searching for campus locations like PMU, Armstrong, or Lynn Hall.
+            </p>
+            <Link href="/">
+              <Button>
+                Back to Home
+              </Button>
+            </Link>
+          </Card>
+        ) : (
+          sortedRoutes.map((route, index) => (
           <Card key={route.id} className="p-4 hover:shadow-lg transition-shadow cursor-pointer">
             {/* Route Header */}
             <div className="flex items-start justify-between mb-3">
@@ -427,7 +305,7 @@ export default function RoutesPage() {
               </Button>
             </div>
           </Card>
-        ))}
+        )))}
       </main>
 
       {/* Bottom Navigation */}

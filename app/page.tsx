@@ -123,7 +123,7 @@ export default function Home() {
 
             {/* Search Button */}
             <div className="pt-2">
-              <Link href="/routes">
+              <Link href={`/routes?origin=${encodeURIComponent(origin || 'PMU')}&destination=${encodeURIComponent(destination || 'Armstrong')}`}>
                 <Button className="w-full" size="lg">
                   Search Routes
                 </Button>
@@ -141,7 +141,7 @@ export default function Home() {
               <div className="flex justify-between items-center">
                 <div>
                   <h4 className="font-semibold">Purdue Campus Transit</h4>
-                  <p className="text-sm text-muted-foreground">CityBus routes on campus</p>
+                  <p className="text-sm text-muted-foreground">Fixed route shuttle tracker</p>
                 </div>
                 <div className="text-2xl">🚌</div>
               </div>
