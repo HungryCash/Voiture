@@ -19,6 +19,9 @@ import {
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
+// Force dynamic rendering to avoid build-time errors
+export const dynamic = 'force-dynamic';
+
 type Route = {
   id: string;
   name: string;
