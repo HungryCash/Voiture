@@ -10,9 +10,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
-// Force dynamic rendering to avoid build-time errors
-export const dynamic = 'force-dynamic';
-
 export default function AuthPage() {
   const router = useRouter();
   const supabase = createClient();

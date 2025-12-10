@@ -11,9 +11,6 @@ import { Card } from "@/components/ui/card";
 import { ArrowLeftRight, MapPin, User, Navigation } from "lucide-react";
 import Link from "next/link";
 
-// Force dynamic rendering to avoid build-time errors
-export const dynamic = 'force-dynamic';
-
 export default function Home() {
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");

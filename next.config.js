@@ -1,9 +1,4 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  generateBuildId: async () => {
-    // Force new build ID to bust cache
-    return `build-${Date.now()}`
-  }
-}
+const nextConfig = {}
 
 module.exports = nextConfig
